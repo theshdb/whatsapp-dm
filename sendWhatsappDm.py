@@ -14,6 +14,8 @@ from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.service import Service
 
+from filterNumbers import filterNumbers
+
 BASE_URL = "https://web.whatsapp.com/"
 
 #defining chrome options
@@ -30,6 +32,7 @@ browser = webdriver.Chrome(options=chromeOptions, service=service)
 browser.get(BASE_URL)
 browser.maximize_window()
 
+filterNumbers()
 # input file for phone numbers
 filename = 'filteredNumbers.txt'
 currentDirectory = os.path.dirname(os.path.abspath(__file__))
@@ -44,9 +47,13 @@ inputMessageFile = os.path.join(currentDirectory, filename)
 with open(inputMessageFile, "r") as file:
     inputMessage = file.read()
 
+if len(phoneNumbers) == 0:
+    print('No phone numbers found in filteredNumbers.txt file.')
+    exit()
+
 #sending message to each phone
 for phone in phoneNumbers:
-    print(phone)
+    print('Sending message to:', phone)
     try:
         #opening whatsapp chat for the current number
         CHAT_URL = "https://web.whatsapp.com/send?phone={phone}&text&type=phone_number&app_absent=1"
@@ -55,7 +62,7 @@ for phone in phoneNumbers:
 
         # Wait for the input box
         inputXpath = (
-            '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[1]'
+            '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div[2]/div[1]/p'
         )
         inputBox = WebDriverWait(browser, 20).until(
             expected_conditions.presence_of_element_located((By.XPATH, inputXpath))
@@ -78,9 +85,9 @@ for phone in phoneNumbers:
 
         #clicking send button after selecting a file
         sendButton = WebDriverWait(browser, 60).until(
-            expected_conditions.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div/div[3]/div[2]/span/div/span/div/div/div[2]/div/div[2]/div[2]/div/div/span'))
+            expected_conditions.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div[2]/div[2]/div[2]/span/div/span/div/div/div[2]/div/div[2]/div[2]/div/div[1]/span'))
         )
-        sendButton.click()
+        sendButton.click()  
         time.sleep(1)
 
         #sending message 
@@ -97,15 +104,13 @@ for phone in phoneNumbers:
     except WebDriverException:
         continue
 
-   
-
 #Clicking menu button
 menuButton = browser.find_element(By.XPATH, '//div[@role="button"][@title="Menu"]')
 menuButton.click()
 
 #clicking logout option from the menu options
 logout = WebDriverWait(browser, 60).until(
-        expected_conditions.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div/div[4]/header/div[2]/div/span/div[4]/span/div/ul/li[6]'))
+        expected_conditions.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div[2]/div[3]/header/div[2]/div/span/div[5]/span/div/ul/li[6]'))
     )
 logout.click()
 
@@ -114,7 +119,6 @@ logoutConfirmation  = WebDriverWait(browser, 60).until(
         expected_conditions.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/span[2]/div/div/div/div/div/div/div[3]/div/button[2]/div/div'))
     )
 logoutConfirmation.click()
-print('Logged out')
 
 time.sleep(3)
 browser.quit()
