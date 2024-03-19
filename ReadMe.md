@@ -26,6 +26,16 @@ To run this project, you need to install the following packages:
 
 Make sure to install these packages before running the project to ensure smooth execution.
 
+## Setting up input files
+
+Before running the project, if you want to send any files then make sure to add the files you want to send to the `inputFiles` directory. These can be images, documents, or any other files that you want to send along with the message.
+
+Also, write the message you want to send to `inputMessage.txt`. You can format the message using markdown or WhatsApp text formatting styles like bold, URLs, etc.
+
+To specify the phone numbers to which the message should be sent, add them to the file named `inputNumbers.txt`. You can copy and paste the numbers by scanning them from your camera lens from a document or manually enter them in this file.
+
+Ensure that the input files are correctly formatted and placed in the designated directories before running the Python script.
+
 ## Running the Python file
 
 To run a Python file from the terminal, use the following command:
