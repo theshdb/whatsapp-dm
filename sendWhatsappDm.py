@@ -12,18 +12,19 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.chrome.service import Service
 
 BASE_URL = "https://web.whatsapp.com/"
 
 #defining chrome options
+service = Service()
 chromeOptions = Options()
 chromeOptions.add_argument("start-maximized")
 userDataDir = ''.join(random.choices(string.ascii_letters, k=8))
 chromeOptions.add_argument("--user-data-dir=/tmp/chrome-data/" + userDataDir)
 chromeOptions.add_argument("--incognito")
-
 #initializing chrome driver
-browser = webdriver.Chrome(ChromeDriverManager().install(),  options=chromeOptions,)
+browser = webdriver.Chrome(options=chromeOptions, service=service)
 
 #opening whatsapp in max window size
 browser.get(BASE_URL)
