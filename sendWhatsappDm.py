@@ -34,16 +34,20 @@ browser.maximize_window()
 
 filterNumbers()
 # input file for phone numbers
-filename = FILTERED_NUMBERS_FILE
+
+# filename = FILTERED_NUMBERS_FILE_NAME
+
 currentDirectory = os.path.dirname(os.path.abspath(__file__))
-filteredInputNumbersFile = os.path.join(currentDirectory, filename)
+filteredInputNumbersFile = os.path.join(currentDirectory, FILTERED_NUMBERS_FILE_NAME)
 with open(filteredInputNumbersFile, "r") as file:
     filteredInputNumbersFileData = file.read()
 phoneNumbers = filteredInputNumbersFileData.split("\n")
 
 # input file for input message
-filename = INPUT_MESSAGE_FILE
-inputMessageFile = os.path.join(currentDirectory, filename)
+
+# filename = INPUT_MESSAGE_FILE_NAME
+
+inputMessageFile = os.path.join(currentDirectory,INPUT_MESSAGE_FILE_NAME)
 with open(inputMessageFile, "r") as file:
     inputMessage = file.read()
 
@@ -56,14 +60,12 @@ for phone in phoneNumbers:
     print('Sending message to:', phone)
     try:
         #opening whatsapp chat for the current number
-        CHAT_URL = f"https://web.whatsapp.com/send?phone={phone}&text&type=phone_number&app_absent=1"
+       
         browser.get(CHAT_URL.format(phone=phone))
         time.sleep(1)
 
         # Wait for the input box
-        inputXpath = (
-            '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div[2]/div[1]/p'
-        )
+       
         inputBox = WebDriverWait(browser, 20).until(
             expected_conditions.presence_of_element_located((By.XPATH, inputXpath))
         )   
@@ -124,7 +126,7 @@ time.sleep(3)
 browser.quit()
 
 # Write the file data to a different file
-outputFilename = MESSAGE_SENT_FILE
+outputFilename = OUTPUT_FILE_NAME
 outputFile = os.path.join(currentDirectory, outputFilename)
 with open(outputFile, "w") as outFile:
     outFile.write(filteredInputNumbersFileData)

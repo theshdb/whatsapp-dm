@@ -4,11 +4,15 @@ CHROME_DATA_DIR = "/tmp/chrome-data/"
 
 INPUT_FILES_DIR = "inputFiles"
 
-INPUT_MESSAGE_FILE = "inputMessage.txt"
+INPUT_MESSAGE_FILE_NAME = "inputMessage.txt"
 
-FILTERED_NUMBERS_FILE = "filteredNumbers.txt"
+CHAT_URL = "https://web.whatsapp.com/send?phone={phone}&text&type=phone_number&app_absent=1"
 
-MESSAGE_SENT_FILE = "messageSentToNumbers.txt"
+inputXpath = '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div[2]/div[1]/p'
+        
+FILTERED_NUMBERS_FILE_NAME = "filteredNumbers.txt"
+
+OUTPUT_FILE_NAME = "messageSentToNumbers.txt"
 
 ATTACHMENT_BUTTON_XPATH = '//div[@title="Attach"]'
 
