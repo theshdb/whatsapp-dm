@@ -15,15 +15,14 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.service import Service
 
 from filterNumbers import filterNumbers
-
-BASE_URL = "https://web.whatsapp.com/"
+from constants import *
 
 #defining chrome options
 service = Service()
 chromeOptions = Options()
 chromeOptions.add_argument("start-maximized")
 userDataDir = ''.join(random.choices(string.ascii_letters, k=8))
-chromeOptions.add_argument("--user-data-dir=/tmp/chrome-data/" + userDataDir)
+chromeOptions.add_argument(f"--user-data-dir={CHROME_DATA_DIR}{userDataDir}")
 chromeOptions.add_argument("--incognito")
 #initializing chrome driver
 browser = webdriver.Chrome(options=chromeOptions, service=service)
@@ -34,16 +33,16 @@ browser.maximize_window()
 
 filterNumbers()
 # input file for phone numbers
-filename = 'filteredNumbers.txt'
+
 currentDirectory = os.path.dirname(os.path.abspath(__file__))
-filteredInputNumbersFile = os.path.join(currentDirectory, filename)
+filteredInputNumbersFile = os.path.join(currentDirectory, FILTERED_NUMBERS_FILE_NAME)
 with open(filteredInputNumbersFile, "r") as file:
     filteredInputNumbersFileData = file.read()
 phoneNumbers = filteredInputNumbersFileData.split("\n")
 
 # input file for input message
-filename = 'inputMessage.txt'
-inputMessageFile = os.path.join(currentDirectory, filename)
+
+inputMessageFile = os.path.join(currentDirectory,INPUT_MESSAGE_FILE_NAME)
 with open(inputMessageFile, "r") as file:
     inputMessage = file.read()
 
@@ -56,25 +55,23 @@ for phone in phoneNumbers:
     print('Sending message to:', phone)
     try:
         #opening whatsapp chat for the current number
-        CHAT_URL = "https://web.whatsapp.com/send?phone={phone}&text&type=phone_number&app_absent=1"
+       
         browser.get(CHAT_URL.format(phone=phone))
         time.sleep(1)
 
         # Wait for the input box
-        inputXpath = (
-            '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div[2]/div[1]/p'
-        )
+       
         inputBox = WebDriverWait(browser, 20).until(
-            expected_conditions.presence_of_element_located((By.XPATH, inputXpath))
+            expected_conditions.presence_of_element_located((By.XPATH, INPUT_XPATH))
         )   
 
         # Get a list of all files in the inputFiles directory
-        inputFilesDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'inputFiles')
+        inputFilesDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), INPUT_FILES_DIR)
         inputFilesList = os.listdir(inputFilesDir)
 
         if len(inputFilesList) > 0:
             #find and click attach icon
-            attachmentButton = browser.find_element(By.XPATH, '//div[@title="Attach"]')
+            attachmentButton = browser.find_element(By.XPATH, ATTACHMENT_BUTTON_XPATH)
             attachmentButton.click()
 
             # Iterate over each file and upload it
@@ -85,7 +82,7 @@ for phone in phoneNumbers:
 
         #clicking send button after selecting a file
         sendButton = WebDriverWait(browser, 60).until(
-            expected_conditions.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div[2]/div[2]/div[2]/span/div/span/div/div/div[2]/div/div[2]/div[2]/div/div[1]/span'))
+            expected_conditions.presence_of_element_located((By.XPATH, SEND_BUTTON_XPATH))
         )
         sendButton.click()  
         time.sleep(1)
@@ -105,18 +102,18 @@ for phone in phoneNumbers:
         continue
 
 #Clicking menu button
-menuButton = browser.find_element(By.XPATH, '//div[@role="button"][@title="Menu"]')
+menuButton = browser.find_element(By.XPATH, MENU_BUTTON_XPATH)
 menuButton.click()
 
 #clicking logout option from the menu options
 logout = WebDriverWait(browser, 60).until(
-        expected_conditions.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div[2]/div[3]/header/div[2]/div/span/div[5]/span/div/ul/li[6]'))
+        expected_conditions.presence_of_element_located((By.XPATH, LOGOUT_XPATH))
     )
 logout.click()
 
 #clicking logout confirmation
 logoutConfirmation  = WebDriverWait(browser, 60).until(
-        expected_conditions.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/span[2]/div/div/div/div/div/div/div[3]/div/button[2]/div/div'))
+        expected_conditions.presence_of_element_located((By.XPATH, LOGOUT_CONFIRMATION_XPATH))
     )
 logoutConfirmation.click()
 
@@ -124,7 +121,7 @@ time.sleep(3)
 browser.quit()
 
 # Write the file data to a different file
-outputFilename = 'messageSentToNumbers.txt'
+outputFilename = OUTPUT_FILE_NAME
 outputFile = os.path.join(currentDirectory, outputFilename)
 with open(outputFile, "w") as outFile:
     outFile.write(filteredInputNumbersFileData)
@@ -133,9 +130,3 @@ with open(outputFile, "w") as outFile:
 with open(filteredInputNumbersFile, "w") as file:
     file.truncate()
 print('filteredNumbers.txt file data deleted.')
-
-
-
-
-
-
