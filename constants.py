@@ -8,7 +8,7 @@ INPUT_MESSAGE_FILE_NAME = "inputMessage.txt"
 
 CHAT_URL = "https://web.whatsapp.com/send?phone={phone}&text&type=phone_number&app_absent=1"
 
-inputXpath = '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div[2]/div[1]/p'
+INPUT_XPATH = '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div[2]/div[1]/p'
         
 FILTERED_NUMBERS_FILE_NAME = "filteredNumbers.txt"
 

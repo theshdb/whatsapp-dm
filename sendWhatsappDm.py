@@ -17,7 +17,6 @@ from selenium.webdriver.chrome.service import Service
 from filterNumbers import filterNumbers
 from constants import *
 
-
 #defining chrome options
 service = Service()
 chromeOptions = Options()
@@ -35,8 +34,6 @@ browser.maximize_window()
 filterNumbers()
 # input file for phone numbers
 
-# filename = FILTERED_NUMBERS_FILE_NAME
-
 currentDirectory = os.path.dirname(os.path.abspath(__file__))
 filteredInputNumbersFile = os.path.join(currentDirectory, FILTERED_NUMBERS_FILE_NAME)
 with open(filteredInputNumbersFile, "r") as file:
@@ -44,8 +41,6 @@ with open(filteredInputNumbersFile, "r") as file:
 phoneNumbers = filteredInputNumbersFileData.split("\n")
 
 # input file for input message
-
-# filename = INPUT_MESSAGE_FILE_NAME
 
 inputMessageFile = os.path.join(currentDirectory,INPUT_MESSAGE_FILE_NAME)
 with open(inputMessageFile, "r") as file:
@@ -67,7 +62,7 @@ for phone in phoneNumbers:
         # Wait for the input box
        
         inputBox = WebDriverWait(browser, 20).until(
-            expected_conditions.presence_of_element_located((By.XPATH, inputXpath))
+            expected_conditions.presence_of_element_located((By.XPATH, INPUT_XPATH))
         )   
 
         # Get a list of all files in the inputFiles directory
